@@ -1,15 +1,18 @@
-# tab-news
+# 🗞️ tabnews-cli
 
-To install dependencies:
+Um client CLI para o [TabNews](https://tabnews.com.br).
+
+📦 Instale dependencias
 
 ```bash
 bun install
 ```
 
-To run:
+🔥 Inicie
 
 ```bash
-bun run index.ts
+bun run start
 ```
 
-This project was created using `bun init` in bun v1.0.23. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+Esse projeto foi criado usando `bun init`, com bun v1.0.23. [Bun](https://bun.sh) é um rapido runtime JavaScript all-in-one.
+

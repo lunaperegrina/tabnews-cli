@@ -5,7 +5,7 @@ import inquirer from "inquirer";
 import type { Article } from "./utils/article";
 import { getNews, getArticle } from "./getData";
 
-(async function () {
+(async () => {
 	console.clear();
 	try {
 		const news = await getNews();
@@ -35,11 +35,9 @@ import { getNews, getArticle } from "./getData";
 					(article) => article.title === answers.post.slice(0, answers.post.indexOf("🔥") - 1),
 				);
 
-				article == undefined ?
-					console.log("Artigo não encontrado")
-					: async () => {
-						await getArticle(article).then((data) => { console.log(data.body) });
-					}
+				if (article !== undefined) {
+					await getArticle(article).then((data) => { console.log(data.body) })
+				}
 
 			});
 	} catch (error) {

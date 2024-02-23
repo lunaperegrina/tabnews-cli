@@ -1,5 +1,5 @@
 {
-  "name": "tab-news",
+  "name": "tabnews-cli",
   "module": "index.ts",
   "type": "module",
   "version": "1.0.0",
@@ -8,7 +8,8 @@
   "bin": "build/index.js",
   "scripts": {
     "start": "bun run ./src/index.ts",
-    "build": "bun build ./src/index.ts --outdir ./build --target=node && node ./build/index.js",
+    "build": "bun build ./src/index.ts --outdir ./build --target=node",
+    "build:start": "bun build ./src/index.ts --outdir ./build --target=node && node ./build/index.js",
     "biome:check": "biome check ./src",
     "biome:check-apply": "biome check --apply ./src",
     "biome:check-apply-unsafe": "biome check --apply-unsafe ./src",

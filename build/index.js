@@ -13386,7 +13386,7 @@ var require_wrap_ansi = __commonJS((exports, module) => {
   };
 });
 
-// node_modules/has-flag/index.js
+// node_modules/ora/node_modules/chalk/node_modules/supports-color/node_modules/has-flag/index.js
 var require_has_flag = __commonJS((exports, module) => {
   module.exports = (flag, argv = process.argv) => {
     const prefix = flag.startsWith("-") ? "" : flag.length === 1 ? "-" : "--";
@@ -13396,7 +13396,7 @@ var require_has_flag = __commonJS((exports, module) => {
   };
 });
 
-// node_modules/supports-color/index.js
+// node_modules/ora/node_modules/chalk/node_modules/supports-color/index.js
 var require_supports_color = __commonJS((exports, module) => {
   var translateLevel2 = function(level) {
     if (level === 0) {
@@ -15455,6 +15455,115 @@ var require_cli_spinners = __commonJS((exports, module) => {
   module.exports = spinners;
 });
 
+// node_modules/log-symbols/node_modules/chalk/node_modules/supports-color/node_modules/has-flag/index.js
+var require_has_flag2 = __commonJS((exports, module) => {
+  module.exports = (flag, argv = process.argv) => {
+    const prefix = flag.startsWith("-") ? "" : flag.length === 1 ? "-" : "--";
+    const position = argv.indexOf(prefix + flag);
+    const terminatorPosition = argv.indexOf("--");
+    return position !== -1 && (terminatorPosition === -1 || position < terminatorPosition);
+  };
+});
+
+// node_modules/log-symbols/node_modules/chalk/node_modules/supports-color/index.js
+var require_supports_color2 = __commonJS((exports, module) => {
+  var translateLevel2 = function(level) {
+    if (level === 0) {
+      return false;
+    }
+    return {
+      level,
+      hasBasic: true,
+      has256: level >= 2,
+      has16m: level >= 3
+    };
+  };
+  var supportsColor2 = function(haveStream, streamIsTTY) {
+    if (forceColor === 0) {
+      return 0;
+    }
+    if (hasFlag2("color=16m") || hasFlag2("color=full") || hasFlag2("color=truecolor")) {
+      return 3;
+    }
+    if (hasFlag2("color=256")) {
+      return 2;
+    }
+    if (haveStream && !streamIsTTY && forceColor === undefined) {
+      return 0;
+    }
+    const min = forceColor || 0;
+    if (env2.TERM === "dumb") {
+      return min;
+    }
+    if (process.platform === "win32") {
+      const osRelease = os2.release().split(".");
+      if (Number(osRelease[0]) >= 10 && Number(osRelease[2]) >= 10586) {
+        return Number(osRelease[2]) >= 14931 ? 3 : 2;
+      }
+      return 1;
+    }
+    if ("CI" in env2) {
+      if (["TRAVIS", "CIRCLECI", "APPVEYOR", "GITLAB_CI", "GITHUB_ACTIONS", "BUILDKITE"].some((sign) => (sign in env2)) || env2.CI_NAME === "codeship") {
+        return 1;
+      }
+      return min;
+    }
+    if ("TEAMCITY_VERSION" in env2) {
+      return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env2.TEAMCITY_VERSION) ? 1 : 0;
+    }
+    if (env2.COLORTERM === "truecolor") {
+      return 3;
+    }
+    if ("TERM_PROGRAM" in env2) {
+      const version = parseInt((env2.TERM_PROGRAM_VERSION || "").split(".")[0], 10);
+      switch (env2.TERM_PROGRAM) {
+        case "iTerm.app":
+          return version >= 3 ? 3 : 2;
+        case "Apple_Terminal":
+          return 2;
+      }
+    }
+    if (/-256(color)?$/i.test(env2.TERM)) {
+      return 2;
+    }
+    if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env2.TERM)) {
+      return 1;
+    }
+    if ("COLORTERM" in env2) {
+      return 1;
+    }
+    return min;
+  };
+  var getSupportLevel = function(stream) {
+    const level = supportsColor2(stream, stream && stream.isTTY);
+    return translateLevel2(level);
+  };
+  var os2 = __require("os");
+  var tty2 = __require("tty");
+  var hasFlag2 = require_has_flag2();
+  var { env: env2 } = process;
+  var forceColor;
+  if (hasFlag2("no-color") || hasFlag2("no-colors") || hasFlag2("color=false") || hasFlag2("color=never")) {
+    forceColor = 0;
+  } else if (hasFlag2("color") || hasFlag2("colors") || hasFlag2("color=true") || hasFlag2("color=always")) {
+    forceColor = 1;
+  }
+  if ("FORCE_COLOR" in env2) {
+    if (env2.FORCE_COLOR === "true") {
+      forceColor = 1;
+    } else if (env2.FORCE_COLOR === "false") {
+      forceColor = 0;
+    } else {
+      forceColor = env2.FORCE_COLOR.length === 0 ? 1 : Math.min(parseInt(env2.FORCE_COLOR, 10), 3);
+    }
+  }
+  module.exports = {
+    supportsColor: getSupportLevel,
+    stdout: translateLevel2(supportsColor2(true, tty2.isatty(1))),
+    stderr: translateLevel2(supportsColor2(true, tty2.isatty(2)))
+  };
+});
+
 // node_modules/log-symbols/node_modules/chalk/source/util.js
 var require_util2 = __commonJS((exports, module) => {
   var stringReplaceAll2 = (string, substring, replacer) => {
@@ -15608,7 +15717,7 @@ var require_source2 = __commonJS((exports, module) => {
     return chalkFactory2(options);
   };
   var ansiStyles2 = require_ansi_styles();
-  var { stdout: stdoutColor2, stderr: stderrColor2 } = require_supports_color();
+  var { stdout: stdoutColor2, stderr: stderrColor2 } = require_supports_color2();
   var {
     stringReplaceAll: stringReplaceAll2,
     stringEncaseCRLFWithFirstIndex: stringEncaseCRLFWithFirstIndex2
@@ -31765,8 +31874,23 @@ var inquirer = {
 };
 var inquirer_default = inquirer;
 
+// src/getData.ts
+async function getNews() {
+  const url = "https://www.tabnews.com.br/api/v1/contents?page=1&per_page=10";
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}
+async function getArticle(article) {
+  const url = `https://www.tabnews.com.br/api/v1/contents/${article.owner_username}/${article.slug}`;
+  console.log(url);
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}
+
 // src/index.ts
-async function main() {
+(async () => {
   console.clear();
   try {
     const news = await getNews();
@@ -31786,8 +31910,7 @@ async function main() {
       }
     ]).then(async (answers) => {
       console.clear();
-      const cut = answers.post.slice(0, answers.post.indexOf("\uD83D\uDD25") - 1);
-      const article = refineNews.find((article2) => article2.title === cut);
+      const article = refineNews.find((article2) => article2.title === answers.post.slice(0, answers.post.indexOf("\uD83D\uDD25") - 1));
       if (article !== undefined) {
         await getArticle(article).then((data) => {
           console.log(data.body);
@@ -31797,22 +31920,4 @@ async function main() {
   } catch (error) {
     console.error("Error fetching news:", error);
   }
-}
-async function getNews() {
-  const url = "https://www.tabnews.com.br/api/v1/contents?page=1&per_page=10";
-  const response = await fetch(url);
-  const data = await response.json();
-  return data;
-}
-async function getArticle(article) {
-  const url = `https://www.tabnews.com.br/api/v1/contents/${article.owner_username}/${article.slug}`;
-  console.log(url);
-  const response = await fetch(url);
-  const data = await response.json();
-  return data;
-}
-main();
-export {
-  getNews,
-  getArticle
-};
+})();
