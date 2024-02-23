@@ -1,0 +1,30 @@
+{
+  "name": "tab-news",
+  "module": "index.ts",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "A simple news app on the terminal",
+  "main": "build/index.js",
+  "bin": "build/index.js",
+  "scripts": {
+    "start": "bun run ./src/index.ts",
+    "build": "bun build ./src/index.ts --outdir ./build --target=node && node ./build/index.js",
+    "biome:check": "biome check ./src",
+    "biome:check-apply": "biome check --apply ./src",
+    "biome:check-apply-unsafe": "biome check --apply-unsafe ./src",
+    "b:cau": "bun biome:check-apply-unsafe",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.5.3",
+    "@types/bun": "latest",
+    "husky": "^9.0.11"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@types/inquirer": "^9.0.7",
+    "inquirer": "^9.2.15"
+  }
+}
