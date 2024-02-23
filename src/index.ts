@@ -2,38 +2,20 @@
 
 import inquirer from "inquirer";
 
-interface Article {
-    id: string;
-    owner_id: string;
-    parent_id: string | null;
-    slug: string;
-    title: string;
-    status: "published" | "draft" | "deleted"; // Assuming status can be "draft" or "deleted" as well
-    source_url: string | null;
-    created_at: string; // Assuming this is a ISO 8601 date string
-    updated_at: string; // Assuming this is a ISO 8601 date string
-    published_at: string | null; // Assuming this is a ISO 8601 date string
-    deleted_at: string | null; // Assuming this is a ISO 8601 date string
-    tabcoins: number;
-    tabcoins_credit: number;
-    tabcoins_debit: number;
-    owner_username: string;
-    children_deep_count: number;
-}
+import type { Article } from "./utils/article";
+import { getNews, getArticle } from "./getData";
 
-async function main() {
+(async function () {
 	console.clear();
 	try {
 		const news = await getNews();
-
-		console.log(news);
 
 		const refineNews = news.map((article: Article) => {
 			return article;
 		});
 
 		const nameArticles = refineNews.map((article) => {
-			return article.title;
+			return `${article.title} 🔥 ${article.tabcoins} | 💬 ${article.children_deep_count} | ${article.owner_username}`;
 		});
 
 		inquirer
@@ -46,38 +28,21 @@ async function main() {
 					choices: nameArticles,
 				},
 			])
-			.then((answers) => {
+			.then(async (answers) => {
 				console.clear();
+				
 				const article = refineNews.find(
-					(article) => article.title === answers.post,
+					(article) => article.title === answers.post.slice(0, answers.post.indexOf("🔥") - 1),
 				);
 
-				getArticle(article as Article).then((data: any) => {
-					console.log(data.body);
-				});
+				article == undefined ?
+					console.log("Artigo não encontrado")
+					: async () => {
+						await getArticle(article).then((data) => { console.log(data.body) });
+					}
 
 			});
 	} catch (error) {
 		console.error("Error fetching news:", error);
 	}
-}
-
-main();
-
-export async function getNews(): Promise<Article[]> {
-	const url = "https://www.tabnews.com.br/api/v1/contents?page=1";
-
-	const response = await fetch(url);
-	const data = await response.json();
-
-	return data as Article[];
-}
-
-export async function getArticle(article: Article) {
-	const url = `https://www.tabnews.com.br/api/v1/contents/${article.owner_username}/${article.slug}`;
-
-	const response = await fetch(url);
-	const data = await response.json();
-
-	return data;
-}
+})();

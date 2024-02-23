@@ -31766,21 +31766,15 @@ var inquirer = {
 var inquirer_default = inquirer;
 
 // src/index.ts
-import fs from "fs";
-import {exec} from "node:child_process";
 async function main() {
   console.clear();
   try {
     const news = await getNews();
     const refineNews = news.map((article) => {
-      return {
-        title: article.title,
-        slug: article.slug,
-        owner_username: article.owner_username
-      };
+      return article;
     });
     const nameArticles = refineNews.map((article) => {
-      return article.title;
+      return `${article.title} \uD83D\uDD25 ${article.tabcoins} | \uD83D\uDCAC ${article.children_deep_count} | ${article.owner_username}`;
     });
     inquirer_default.prompt([
       {
@@ -31790,26 +31784,29 @@ async function main() {
         message: "Que artigo deseja ver?",
         choices: nameArticles
       }
-    ]).then((answers) => {
+    ]).then(async (answers) => {
       console.clear();
-      const article = refineNews.find((article2) => article2.title === answers.post);
-      getArticle(article).then((data) => {
-        fs.writeFileSync("article.txt", data.body);
-        exec("less ./article.txt");
-      });
+      const cut = answers.post.slice(0, answers.post.indexOf("\uD83D\uDD25") - 1);
+      const article = refineNews.find((article2) => article2.title === cut);
+      if (article !== undefined) {
+        await getArticle(article).then((data) => {
+          console.log(data.body);
+        });
+      }
     });
   } catch (error) {
     console.error("Error fetching news:", error);
   }
 }
 async function getNews() {
-  const url = "https://www.tabnews.com.br/api/v1/contents?page=1";
+  const url = "https://www.tabnews.com.br/api/v1/contents?page=1&per_page=10";
   const response = await fetch(url);
   const data = await response.json();
   return data;
 }
 async function getArticle(article) {
   const url = `https://www.tabnews.com.br/api/v1/contents/${article.owner_username}/${article.slug}`;
+  console.log(url);
   const response = await fetch(url);
   const data = await response.json();
   return data;
