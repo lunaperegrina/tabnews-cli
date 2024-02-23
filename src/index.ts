@@ -5,42 +5,43 @@ import inquirer from "inquirer";
 import type { Article } from "./utils/article";
 import { getNews, getArticle } from "./getData";
 
-(async () => {
-	console.clear();
-	try {
-		const news = await getNews();
+console.clear();
+try {
+  const news = await getNews();
 
-		const refineNews = news.map((article: Article) => {
-			return article;
-		});
+  const refineNews = news.map((article: Article) => {
+    return article;
+  });
 
-		const nameArticles = refineNews.map((article) => {
-			return `${article.title} 🔥 ${article.tabcoins} | 💬 ${article.children_deep_count} | ${article.owner_username}`;
-		});
+  const nameArticles = refineNews.map((article) => {
+    return `${article.title} 🔥 ${article.tabcoins} | 💬 ${article.children_deep_count} | ${article.owner_username}`;
+  });
 
-		inquirer
-			.prompt([
-				{
-					type: "list",
-					name: "post",
-					pageSize: 10,
-					message: "Que artigo deseja ver?",
-					choices: nameArticles,
-				},
-			])
-			.then(async (answers) => {
-				console.clear();
-				
-				const article = refineNews.find(
-					(article) => article.title === answers.post.slice(0, answers.post.indexOf("🔥") - 1),
-				);
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "post",
+        pageSize: 10,
+        message: "Que artigo deseja ver?",
+        choices: nameArticles,
+      },
+    ])
+    .then(async (answers) => {
+      console.clear();
 
-				if (article !== undefined) {
-					await getArticle(article).then((data) => { console.log(data.body) })
-				}
+      const article = refineNews.find(
+        (article) =>
+          article.title ===
+          answers.post.slice(0, answers.post.indexOf("🔥") - 1)
+      );
 
-			});
-	} catch (error) {
-		console.error("Error fetching news:", error);
-	}
-})();
+      if (article !== undefined) {
+        await getArticle(article).then((data) => {
+          console.log(data.body);
+        });
+      }
+    });
+} catch (error) {
+  console.error("Error fetching news:", error);
+}
