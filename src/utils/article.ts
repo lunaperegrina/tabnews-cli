@@ -1,4 +1,4 @@
-export interface Article {
+export type Article = {
   id: string;
   owner_id: string;
   parent_id: string | null;
@@ -16,3 +16,5 @@ export interface Article {
   owner_username: string;
   children_deep_count: number;
 }
+
+export type ArticleWithContent = Article & { content: string; }

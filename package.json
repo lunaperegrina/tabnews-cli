@@ -2,10 +2,14 @@
   "name": "tabnews-cli",
   "module": "index.ts",
   "type": "module",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple news app on the terminal",
   "main": "dist/index.js",
   "bin": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pedroperegrinaa/tabnews-cli"
+  },
   "scripts": {
     "dev": "bun run ./src/index.ts",
     "build": "npx tsup src --format esm --minify",
@@ -14,11 +18,18 @@
     "biome:check": "biome check ./src",
     "biome:check-apply": "biome check --apply ./src",
     "biome:check-apply-unsafe": "biome check --apply-unsafe ./src",
-    "prepare": "husky"
+    "prepare": "husky",
+    "size": "npm run build && size-limit"
   },
+  "size-limit": [
+    {
+      "path": "dist/*.js"
+    }
+  ],
   "devDependencies": {
     "@biomejs/biome": "1.5.3",
-    "@types/bun": "latest",
+    "@size-limit/file": "^11.0.2",
+    "size-limit": "^11.0.2",
     "tsup": "^8.0.2"
   },
   "peerDependencies": {
@@ -26,9 +37,6 @@
   },
   "dependencies": {
     "@types/inquirer": "^9.0.7",
-    "commitizen": "^4.3.0",
-    "husky": "^9.0.11",
-    "inquirer": "^9.2.15",
-    "terser": "^5.28.1"
+    "inquirer": "^9.2.15"
   }
 }
