@@ -18,7 +18,6 @@
     "biome:check": "biome check ./src",
     "biome:check-apply": "biome check --apply ./src",
     "biome:check-apply-unsafe": "biome check --apply-unsafe ./src",
-    "prepare": "husky",
     "size": "npm run build && size-limit"
   },
   "size-limit": [
