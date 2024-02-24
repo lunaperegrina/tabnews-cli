@@ -1,0 +1,1 @@
+async function o(){return await(await fetch("https://www.tabnews.com.br/api/v1/contents?page=1&per_page=10")).json()}async function a(t){let e=`https://www.tabnews.com.br/api/v1/contents/${t.owner_username}/${t.slug}`;return console.log(e),await(await fetch(e)).json()}export{o as a,a as b};

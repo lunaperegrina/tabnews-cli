@@ -1,0 +1,2 @@
+#!/usr/bin/env node
+import{a as i,b as s}from"./chunk-DMZPT5ZX.js";import a from"inquirer";console.clear();try{let o=(await i()).map(e=>e),c=o.map(e=>`${e.title} \u{1F525} ${e.tabcoins} | \u{1F4AC} ${e.children_deep_count} | ${e.owner_username}`);a.prompt([{type:"list",name:"post",pageSize:10,message:"Que artigo deseja ver?",choices:c}]).then(async e=>{console.clear();let n=o.find(t=>t.title===e.post.slice(0,e.post.indexOf("\u{1F525}")-1));n!==void 0&&await s(n).then(t=>{console.log(t.body)})})}catch(r){console.error("Error fetching news:",r)}
